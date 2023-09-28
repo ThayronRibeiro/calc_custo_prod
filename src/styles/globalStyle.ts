@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { ButtonProps } from "../components/button";
+import Select from "react-select";
 
 export const Body = styled.div`
   display: flex;
@@ -60,16 +61,37 @@ export const VarInputArea = styled.div`
   padding: 0 15px;
 
   input {
-    height: 25px;
+    height: 30px;
     border: 2px solid ${(props) => props.theme.color.ligth};
     border-radius: 5px;
+    padding: 0 5px;
   }
 
   input:focus {
     outline: none !important;
     border: 2px solid ${(props) => props.theme.color.primary};
   }
+
+  input:disabled{
+    background-color: #f3f3f3;
+  }
+
+  select{
+    height: 30px;
+    border: 2px solid ${(props) => props.theme.color.ligth};
+    border-radius: 5px;
+    padding: 0 5px;
+    color: #000;
+  }
 `;
+
+export const SelectInput = styled(Select)`
+    height: 30px;
+    border: 2px solid ${(props) => props.theme.color.ligth};
+    border-radius: 5px;
+    padding: 0 5px;
+    color: #000;
+`
 
 export const ButtonArea = styled.div`
 position: absolute;
@@ -97,3 +119,14 @@ export const ButtonStyle = styled.button<ButtonProps>`
     opacity: 0.5;
   }
 `;
+
+export const CustoCompraArea = styled.div`
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+width: 100%;
+
+p {
+    font-weight: bolder;
+}
+
+`

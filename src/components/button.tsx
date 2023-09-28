@@ -3,13 +3,10 @@ import { ButtonStyle } from "../styles/globalStyle";
 export interface ButtonProps {
   title?: string;
   success?: boolean;
+  onClick?: any;
 }
 
-export const Button = ({ title, success }: ButtonProps) => {
-  //return <>{success ? <ButtonStyle success>{title}</ButtonStyle> : <ButtonStyle>{title}</ButtonStyle>}</>;
-  return (
-    <>
-    <ButtonStyle success>{title}</ButtonStyle>
-    </>
-  )
+export const Button = ({ title, success, onClick }: ButtonProps) => {
+  return <>{success ? <ButtonStyle success onClick={onClick}>{title}</ButtonStyle> : <ButtonStyle onClick={onClick}>{title}</ButtonStyle>}</>;
+
 };
