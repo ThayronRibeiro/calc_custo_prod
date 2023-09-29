@@ -362,7 +362,7 @@ function App() {
                 value={percMargemLucro}
               ></input>
             </VarInputArea>
-            <VarInputArea></VarInputArea>
+            
             <VarInputArea>
               <p>Preço de Venda Sugerido</p>
               <input disabled value={precoSugerido}></input>

@@ -2,10 +2,31 @@ import styled from "styled-components";
 import { ButtonProps } from "../components/button";
 import Select from "react-select";
 
+const size = {
+  mobileS: '320px',
+  mobileM: '375px',
+  mobileL: '425px',
+  tablet: '768px',
+  laptop: '1024px',
+  laptopL: '1440px',
+  desktop: '2560px'
+}
+
+export const device = {
+  mobileS: `(max-width: ${size.mobileS})`,
+  mobileM: `(max-width: ${size.mobileM})`,
+  mobileL: `(max-width: ${size.mobileL})`,
+  tablet: `(max-width: ${size.tablet})`,
+  laptop: `(max-width: ${size.laptop})`,
+  laptopL: `(max-width: ${size.laptopL})`,
+  desktop: `(max-width: ${size.desktop})`,
+  desktopL: `(max-width: ${size.desktop})`
+};
+
 export const Body = styled.div`
-margin: 0;
-padding: 0;
-box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,20 +40,53 @@ box-sizing: border-box;
   width: 100vw;
   height: 100vh;
   align-items: center;
+
+  @media screen and (${device.laptopL}) {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+  }
 `;
 
 export const Calc = styled.div`
-position: relative;
   display: flex;
   flex-direction: column;
   background-color: ${(props) => props.theme.color.ligth};
   width: 42vw;
-  height: 88vh;
+  height: 80vh;
   margin: 0px 45px;
   border-radius: 15px;
   -webkit-box-shadow: 7px 9px 30px -8px rgba(59, 59, 59, 1);
   -moz-box-shadow: 7px 9px 30px -8px rgba(59, 59, 59, 1);
   box-shadow: 7px 9px 30px -8px rgba(59, 59, 59, 1);
+
+  &:nth-child(2){
+      height: 45vh;
+    }
+
+  @media screen and (${device.tablet}) {
+    height: 90vh;
+  }
+
+  @media screen and (${device.laptopL}) {
+      width: 45vw;
+      height: 100vh;
+      margin: 2rem 15px; 
+
+    &:nth-child(2){
+      height: 70vh;
+    }
+  }
+
+  @media screen and (${device.laptop}) {
+    width: 65vw;
+    height: 100%;
+  }
+
+  &:nth-child(2){
+      height: 100%;
+    }
+
 `;
 
 export const HeaderCalc = styled.div`
@@ -52,13 +106,13 @@ export const HeaderCalc = styled.div`
 `;
 
 export const RegimeAreaCalc = styled.div`
-display: flex;
-flex-direction: column;
-padding: 0 15px;
-margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0 15px;
+  margin-top: 1rem;
 
-select{
-  margin: 0px;
+  select {
+    margin: 0px;
     height: 30px;
     border: 2px solid ${(props) => props.theme.color.ligth};
     border-radius: 5px;
@@ -66,22 +120,30 @@ select{
     color: #000;
   }
 
-  p{
+  p {
     margin: 0;
   }
-`
+`;
 
 export const VarAreaCalc = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
   margin: 10px 15px;
+
+  @media screen and (${device.laptopL}) {
+    grid-template-columns: 2fr 2fr;
+  }
+
+  @media screen and (${device.laptop}) {
+    grid-template-columns: 2fr;
+  }
 `;
 
 export const VarInputArea = styled.div`
   display: flex;
   flex-direction: column;
-  width: 150px;
+  width: 100%;
   //padding: 0 15px;
 
   p {
@@ -100,30 +162,32 @@ export const VarInputArea = styled.div`
     border: 2px solid ${(props) => props.theme.color.primary};
   }
 
-  input:disabled{
+  input:disabled {
     background-color: #f3f3f3;
   }
 
-  select{
+  select {
     height: 30px;
     border: 2px solid ${(props) => props.theme.color.ligth};
     border-radius: 5px;
     padding: 0 5px;
     color: #000;
+  }
+
+  @media screen and (max-width: 840px) {
+    width: 100%;
   }
 `;
 
 export const SelectInput = styled(Select)`
-    height: 30px;
-    border: 2px solid ${(props) => props.theme.color.ligth};
-    border-radius: 5px;
-    padding: 0 5px;
-    color: #000;
-`
+  height: 30px;
+  border: 2px solid ${(props) => props.theme.color.ligth};
+  border-radius: 5px;
+  padding: 0 5px;
+  color: #000;
+`;
 
 export const ButtonArea = styled.div`
-position: absolute;
-bottom: 0;
   display: flex;
   flex-direction: row;
   justify-content: right;
@@ -154,8 +218,11 @@ export const CustoCompraArea = styled.div`
   gap: 20px;
   margin: 10px 15px;
 
-p {
+  p {
     font-weight: bolder;
-}
+  }
 
-`
+  @media screen and (${device.laptopL}) {
+    grid-template-columns: 2fr 2fr;
+  }
+`;
