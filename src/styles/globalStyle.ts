@@ -3,6 +3,9 @@ import { ButtonProps } from "../components/button";
 import Select from "react-select";
 
 export const Body = styled.div`
+margin: 0;
+padding: 0;
+box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,7 +46,7 @@ export const HeaderCalc = styled.div`
   border-bottom: 1px solid #fff;
 
   h3 {
-    color: red;
+    color: #000;
     font-size: 1.8rem;
   }
 `;
@@ -55,27 +58,38 @@ padding: 0 15px;
 margin-top: 1rem;
 
 select{
+  margin: 0px;
     height: 30px;
     border: 2px solid ${(props) => props.theme.color.ligth};
     border-radius: 5px;
     padding: 0 5px;
     color: #000;
   }
+
+  p{
+    margin: 0;
+  }
 `
 
 export const VarAreaCalc = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  margin-top: 1rem;
+  gap: 20px;
+  margin: 10px 15px;
 `;
 
 export const VarInputArea = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 15px;
+  width: 150px;
+  //padding: 0 15px;
+
+  p {
+    margin: 0;
+  }
 
   input {
-    height: 30px;
+    height: 25px;
     border: 2px solid ${(props) => props.theme.color.ligth};
     border-radius: 5px;
     padding: 0 5px;
@@ -135,9 +149,10 @@ export const ButtonStyle = styled.button<ButtonProps>`
 `;
 
 export const CustoCompraArea = styled.div`
-display: grid;
-grid-template-columns: 1fr 1fr 1fr;
-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  margin: 10px 15px;
 
 p {
     font-weight: bolder;
