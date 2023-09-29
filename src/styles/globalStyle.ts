@@ -43,7 +43,7 @@ export const HeaderCalc = styled.div`
   border-bottom: 1px solid #fff;
 
   h3 {
-    color: #000;
+    color: red;
     font-size: 1.8rem;
   }
 `;
