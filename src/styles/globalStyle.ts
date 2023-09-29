@@ -23,8 +23,8 @@ position: relative;
   display: flex;
   flex-direction: column;
   background-color: ${(props) => props.theme.color.ligth};
-  width: 40vw;
-  height: 80vh;
+  width: 42vw;
+  height: 88vh;
   margin: 0px 45px;
   border-radius: 15px;
   -webkit-box-shadow: 7px 9px 30px -8px rgba(59, 59, 59, 1);
@@ -48,11 +48,26 @@ export const HeaderCalc = styled.div`
   }
 `;
 
+export const RegimeAreaCalc = styled.div`
+display: flex;
+flex-direction: column;
+padding: 0 15px;
+margin-top: 1rem;
+
+select{
+    height: 30px;
+    border: 2px solid ${(props) => props.theme.color.ligth};
+    border-radius: 5px;
+    padding: 0 5px;
+    color: #000;
+  }
+`
+
 export const VarAreaCalc = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   width: 100%;
-  margin-top: 2rem;
+  margin-top: 1rem;
 `;
 
 export const VarInputArea = styled.div`

@@ -10,6 +10,7 @@ import {
   ButtonArea,
   CustoCompraArea,
   VarInputArea,
+  RegimeAreaCalc,
 } from "./styles/globalStyle";
 import { theme } from "./styles/Theme.style";
 import { Variable } from "./components/variables";
@@ -38,37 +39,11 @@ function App() {
   const [custoCompra, setCustoCompra] = useState<number>(0);
   const [percVendaProd, setPercVendaProd] = useState<number>(0);
 
-  useEffect(() => {
-    let percCustoFixoMensal = (custoFixoValue / fatMensalValue) * 100;
+  const [percMargemLucro, setPercMargemLucro] = useState<number>(0);
+  const [precoSugerido, setPrecoSugerido] = useState<number>(0);
 
-    let percVenda =
-      percCustoFixoMensal +
-      simplesNacValue +
-      comissaoValue +
-      pisValue +
-      cofinsValue +
-      irValue +
-      csllValue +
-      outrosValue;
-
-    let custoCompraValor:number = 0;
-
-
-    if (percIpiCompra===0 && percIcmsCompra===0 && valorIcmsSubst===0 && valorFrete===0 && percFrete===0){
-      setCustoCompra(precoCompra);
-    }
-    else if (percIpiCompra>0){
-      custoCompraValor = precoCompra - (precoCompra * percIpiCompra/100);
-      setCustoCompra(custoCompraValor);
-    }
-  }, [
-    precoCompra,
-    percIpiCompra,
-    percIcmsCompra,
-    valorIcmsSubst,
-    valorFrete,
-    percFrete,
-  ]);
+  const [ufIcmsVenda, setUfIcmsVenda] = useState<string>("0");
+  const [regimeTrib, setRegimeTrib] = useState<string>("-");
 
   const variables = [
     {
@@ -144,7 +119,123 @@ function App() {
     { label: "TO", value: 20 },
   ];
 
-  const [ufIcmsVenda, setUfIcmsVenda] = useState<string>("0");
+  useEffect(() => {
+    let percCustoFixoMensal = (custoFixoValue / fatMensalValue) * 100;
+
+    let percVenda =
+      percCustoFixoMensal +
+      Number(simplesNacValue) +
+      Number(comissaoValue) +
+      Number(pisValue) +
+      Number(cofinsValue) +
+      Number(irValue) +
+      Number(csllValue) +
+      Number(outrosValue);
+
+    let custoCompraValor: number = 0;
+
+    if (regimeTrib === "simplesNacional") {
+      /*setPisValue(0);
+      setCofinsValue(0);*/
+      if (
+        percIpiCompra === 0 &&
+        percIcmsCompra === 0 &&
+        valorIcmsSubst === 0 &&
+        valorFrete === 0 &&
+        percFrete === 0
+      ) {
+        setCustoCompra(precoCompra);
+      } else {
+        custoCompraValor =
+          Number(precoCompra) +
+          Number((precoCompra * percIpiCompra) / 100) +
+          Number(valorFrete);
+
+        let difalIcmsOrigem = percIcmsCompra * (custoCompraValor / 100);
+        let difalBaseCalc =
+          (custoCompraValor - difalIcmsOrigem) /
+          (1 - Number(ufIcmsVenda) / 100);
+        let difalVal =
+          (difalBaseCalc * (Number(ufIcmsVenda) - percIcmsCompra)) / 100;
+
+        let custoCompra =
+          Number(precoCompra) +
+          Number((precoCompra * percIpiCompra) / 100) / 1 +
+          (Number(valorFrete) + Number(valorIcmsSubst) + Number(difalVal));
+
+        setCustoCompra(Number(custoCompra.toFixed(2)));
+      }
+    } else if (regimeTrib === "lucroReal") {
+      setPisValue(3);
+      setCofinsValue(7.6);
+    }
+
+    //PRECO SUGERIDO
+    let divisor = 100 - Number(percVenda) - Number(percMargemLucro);
+
+    if(Number.isNaN(percVenda) || percMargemLucro === 0){
+      setPrecoSugerido(precoCompra)
+    }
+    if (Number.isNaN(percVenda) || percMargemLucro>0){
+      divisor = 100 - percMargemLucro;
+      let precoSugerido = Number(custoCompra / divisor) * 100;
+      setPrecoSugerido(Number(precoSugerido.toFixed(2)));
+    }
+    if(Number(percVenda)>0 && percMargemLucro>0){
+      divisor = 100 - percVenda - percMargemLucro;
+      let precoSugerido = Number(custoCompra / divisor) * 100;
+      setPrecoSugerido(Number(precoSugerido.toFixed(2)));
+    }
+    /*
+    if(Number.isNaN(percVenda) === false && precoCompra > 0 ||
+    percMargemLucro > 0 && precoCompra>0){
+      let precoSugerido = Number(custoCompra / divisor) * 100;
+      setPrecoSugerido(Number(precoSugerido.toFixed(2)));
+    }
+*/
+/*
+    if(Number.isNaN(percVenda) && percMargemLucro===0 && precoCompra>0){
+      setPrecoSugerido(precoCompra);
+    } else if (
+      (Number.isNaN(percVenda) === false ||
+      percMargemLucro > 0 )
+    ) {
+      let precoSugerido = Number(custoCompra / divisor) * 100;
+      setPrecoSugerido(Number(precoSugerido.toFixed(2)));
+    } else {
+      setPrecoSugerido(custoCompra);
+    }*/
+  }, [
+    percMargemLucro,
+    simplesNacValue,
+    comissaoValue,
+    pisValue,
+    cofinsValue,
+    irValue,
+    csllValue,
+    outrosValue,
+    precoSugerido,
+    percVendaProd,
+    percIpiCompra,
+    percIcmsCompra,
+    percFrete,
+    valorFrete,
+    valorIcmsSubst,
+    fatMensalValue,
+    custoFixoValue,
+    ufIcmsVenda,
+    regimeTrib,
+    precoCompra
+  ]);
+
+  useEffect(() => {
+    if (valorFrete > 0 && precoCompra > 0) {
+      let percFrete = (valorFrete / precoCompra) * 100;
+      setPercFrete(Number(percFrete.toFixed(2)));
+    } else {
+      setPercFrete(0);
+    }
+  }, [valorFrete, precoCompra]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -153,6 +244,44 @@ function App() {
           <HeaderCalc>
             <h3>Variáveis de Cálculo</h3>
           </HeaderCalc>
+
+          <RegimeAreaCalc>
+            <label>Selecione seu regime tributário</label>
+            <select
+              name="regimeTrib"
+              defaultValue="-"
+              onChange={(e) => setRegimeTrib(e.target.value)}
+            >
+              <option value={"null"}>-</option>;
+              <option value={"simplesNacional"}>Simples Nacional</option>;
+              <option value={"lucroReal"}>Regime Normal Lucro Real</option>;
+              <option value={"lucroPresumido"}>
+                Regime Normal Lucro Presumido
+              </option>
+              ;
+            </select>
+            <p>Selecione a UF da empresa</p>
+            <select
+              name="UF"
+              defaultValue="Selecione a UF"
+              onChange={(e) => setUfIcmsVenda(e.target.value)}
+            >
+              <option value={0}>Selecione a UF</option>;
+              <option value={19}>AC</option>;<option value={19}>AL</option>;
+              <option value={20}>AM</option>;<option value={18}>AP</option>;
+              <option value={19}>BA</option>;<option value={18}>CE</option>;
+              <option value={19}>DF</option>;<option value={17}>ES</option>;
+              <option value={17}>GO</option>;<option value={20}>MA</option>;
+              <option value={17}>MT</option>;<option value={18}>MG</option>;
+              <option value={19}>PA</option>;<option value={18}>PB</option>;
+              <option value={18}>PE</option>;<option value={21}>PI</option>;
+              <option value={19}>PR</option>;<option value={20}>RN</option>;
+              <option value={17}>RS</option>;<option value={20}>RJ</option>;
+              <option value={17.5}>RO</option>;<option value={20}>RR</option>;
+              <option value={17}>SC</option>;<option value={18}>SP</option>;
+              <option value={22}>SE</option>;<option value={20}>TO</option>;
+            </select>
+          </RegimeAreaCalc>
 
           <VarAreaCalc>
             <>
@@ -197,7 +326,6 @@ function App() {
           <HeaderCalc>
             <h3>Valores do Produto</h3>
           </HeaderCalc>
-
           <VarAreaCalc>
             <>
               {prodValues && (
@@ -227,34 +355,17 @@ function App() {
             </VarInputArea>
             <VarInputArea>
               <p>Margem de Lucro</p>
-              <input></input>
+              <input
+                onChange={(e: any) => {
+                  setPercMargemLucro(e.target.value);
+                }}
+                value={percMargemLucro}
+              ></input>
             </VarInputArea>
-            <VarInputArea>
-              <p>UF Venda Destino</p>
-              <select
-                name="UF"
-                defaultValue="Selecione a UF"
-                onChange={(e) => setUfIcmsVenda(e.target.value)}
-              >
-                <option value={0}>Selecione a UF</option>;
-                <option value={19}>AC</option>;<option value={19}>AL</option>;
-                <option value={20}>AM</option>;<option value={18}>AP</option>;
-                <option value={19}>BA</option>;<option value={18}>CE</option>;
-                <option value={19}>DF</option>;<option value={17}>ES</option>;
-                <option value={17}>GO</option>;<option value={20}>MA</option>;
-                <option value={17}>MT</option>;<option value={18}>MG</option>;
-                <option value={19}>PA</option>;<option value={18}>PB</option>;
-                <option value={18}>PE</option>;<option value={21}>PI</option>;
-                <option value={19}>PR</option>;<option value={20}>RN</option>;
-                <option value={17}>RS</option>;<option value={20}>RJ</option>;
-                <option value={17.5}>RO</option>;<option value={20}>RR</option>;
-                <option value={17}>SC</option>;<option value={18}>SP</option>;
-                <option value={22}>SE</option>;<option value={20}>TO</option>;
-              </select>
-            </VarInputArea>
+            <VarInputArea></VarInputArea>
             <VarInputArea>
               <p>Preço de Venda Sugerido</p>
-              <input></input>
+              <input disabled value={precoSugerido}></input>
             </VarInputArea>
           </CustoCompraArea>
         </Calc>
