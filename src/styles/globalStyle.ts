@@ -87,6 +87,9 @@ export const Calc = styled.div`
       height: 100%;
     }
 
+    @media screen and (${device.tablet}) {
+      width: 85vw;
+  }
 `;
 
 export const HeaderCalc = styled.div`
@@ -224,5 +227,9 @@ export const CustoCompraArea = styled.div`
 
   @media screen and (${device.laptopL}) {
     grid-template-columns: 2fr 2fr;
+  }
+
+  @media screen and (${device.laptop}) {
+    grid-template-columns: 2fr;
   }
 `;
