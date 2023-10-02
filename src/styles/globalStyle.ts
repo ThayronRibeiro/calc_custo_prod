@@ -1,16 +1,17 @@
 import styled from "styled-components";
 import { ButtonProps } from "../components/button";
 import Select from "react-select";
+import  IMaskInput  from 'react-input-mask';
 
 const size = {
-  mobileS: '320px',
-  mobileM: '375px',
-  mobileL: '425px',
-  tablet: '768px',
-  laptop: '1024px',
-  laptopL: '1440px',
-  desktop: '2560px'
-}
+  mobileS: "320px",
+  mobileM: "375px",
+  mobileL: "425px",
+  tablet: "768px",
+  laptop: "1024px",
+  laptopL: "1440px",
+  desktop: "2560px",
+};
 
 export const device = {
   mobileS: `(max-width: ${size.mobileS})`,
@@ -20,7 +21,7 @@ export const device = {
   laptop: `(max-width: ${size.laptop})`,
   laptopL: `(max-width: ${size.laptopL})`,
   desktop: `(max-width: ${size.desktop})`,
-  desktopL: `(max-width: ${size.desktop})`
+  desktopL: `(max-width: ${size.desktop})`,
 };
 
 export const Body = styled.div`
@@ -41,6 +42,7 @@ export const Body = styled.div`
   height: 100vh;
   align-items: center;
 
+
   @media screen and (${device.laptopL}) {
     flex-direction: column;
     width: 100%;
@@ -60,20 +62,31 @@ export const Calc = styled.div`
   -moz-box-shadow: 7px 9px 30px -8px rgba(59, 59, 59, 1);
   box-shadow: 7px 9px 30px -8px rgba(59, 59, 59, 1);
 
-  &:nth-child(2){
+  &:nth-child(2) {
+    height: 45vh;
+  }
+
+  @media screen and (${device.desktop}) {
+    width: 45vw;
+    height: 70vh;
+    margin: 2rem 15px;
+
+    &:nth-child(2) {
       height: 45vh;
     }
+  }
 
   @media screen and (${device.tablet}) {
     height: 90vh;
+    width: 85vw;
   }
 
   @media screen and (${device.laptopL}) {
-      width: 45vw;
-      height: 100vh;
-      margin: 2rem 15px; 
+    width: 45vw;
+    height: 100%;
+    margin: 2rem 15px;
 
-    &:nth-child(2){
+    &:nth-child(2) {
       height: 70vh;
     }
   }
@@ -83,13 +96,10 @@ export const Calc = styled.div`
     height: 100%;
   }
 
-  &:nth-child(2){
-      height: 100%;
-    }
-
-    @media screen and (${device.tablet}) {
-      width: 85vw;
+  &:nth-child(2) {
+    height: 30vw;
   }
+
 `;
 
 export const HeaderCalc = styled.div`
@@ -233,3 +243,19 @@ export const CustoCompraArea = styled.div`
     grid-template-columns: 2fr;
   }
 `;
+
+export const IMaskInputElement = styled(IMaskInput)`
+    height: 25px;
+    border: 2px solid ${(props) => props.theme.color.ligth};
+    border-radius: 5px;
+    padding: 0 5px;
+
+    &:focus {
+    outline: none !important;
+    border: 2px solid ${(props) => props.theme.color.primary};
+  }
+
+  &:disabled {
+    background-color: #f3f3f3;
+  }
+`

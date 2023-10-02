@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { ThemeProvider } from "styled-components";
 import {
@@ -225,7 +224,8 @@ function App() {
     custoFixoValue,
     ufIcmsVenda,
     regimeTrib,
-    precoCompra
+    precoCompra,
+    custoCompra
   ]);
 
   useEffect(() => {
@@ -236,6 +236,8 @@ function App() {
       setPercFrete(0);
     }
   }, [valorFrete, precoCompra]);
+
+
 
   return (
     <ThemeProvider theme={theme}>
