@@ -14,6 +14,7 @@ import {
 import { theme } from "./styles/Theme.style";
 import { Variable } from "./components/variables";
 import { Button } from "./components/button";
+import { parse } from "path";
 
 function App() {
   //VARIÁVEIS DE CÁLCULO
@@ -44,6 +45,8 @@ function App() {
   const [ufIcmsVenda, setUfIcmsVenda] = useState<string>("0");
   const [regimeTrib, setRegimeTrib] = useState<string>("-");
 
+  const [percCustoVenda, setPercCustoVenda] = useState<number>(0);
+
   const variables = [
     {
       title: "Faturamento Mensal",
@@ -67,6 +70,8 @@ function App() {
     { title: "CSLL", value: csllValue, setValue: setCsllValue },
     { title: "Outros Custos", value: outrosValue, setValue: setOutrosValue },
   ];
+
+  const [percCustoFixoMensal, setPercCustoFixoMensal] = useState<number>(0);
 
   const prodValues = [
     { title: "Preço Compra", value: precoCompra, setValue: setPrecoCompra },
@@ -118,10 +123,11 @@ function App() {
     { label: "TO", value: 20 },
   ];
 
-  useEffect(() => {
+  /*
+  useEffect(()=>{
     let percCustoFixoMensal = (custoFixoValue / fatMensalValue) * 100;
 
-    let percVenda =
+    setPercCustoVenda(
       percCustoFixoMensal +
       Number(simplesNacValue) +
       Number(comissaoValue) +
@@ -129,7 +135,31 @@ function App() {
       Number(cofinsValue) +
       Number(irValue) +
       Number(csllValue) +
-      Number(outrosValue);
+      Number(outrosValue));
+  },[simplesNacValue,comissaoValue,pisValue,cofinsValue,irValue,csllValue,outrosValue,custoFixoValue,fatMensalValue])
+*/
+
+  function numberFloat (number: any)  {
+    let stringNumber = JSON.stringify(number);
+    let comVirgula = parseFloat(stringNumber.replace(',','.'));
+    return comVirgula
+  }
+
+  useEffect(()=> {
+    setPercCustoFixoMensal((custoFixoValue / fatMensalValue) * 100);
+  },[custoFixoValue,fatMensalValue]);
+
+
+  useEffect(() => {
+    setPercCustoVenda(
+      percCustoFixoMensal +
+      Number(simplesNacValue) +
+      Number(comissaoValue) +
+      Number(pisValue) +
+      Number(cofinsValue) +
+      Number(irValue) +
+      Number(csllValue) +
+      Number(outrosValue));
 
     let custoCompraValor: number = 0;
 
@@ -170,40 +200,26 @@ function App() {
     }
 
     //PRECO SUGERIDO
-    let divisor = 100 - Number(percVenda) - Number(percMargemLucro);
+    let divisor = 100 - Number(percCustoVenda) - Number(percMargemLucro);
 
-    if(Number.isNaN(percVenda) || percMargemLucro === 0){
+    if(Number.isNaN(percCustoVenda) || percMargemLucro === 0){
       setPrecoSugerido(precoCompra)
     }
-    if (Number.isNaN(percVenda) || percMargemLucro>0){
+    if (Number.isNaN(percCustoVenda) || percMargemLucro>0){
       divisor = 100 - percMargemLucro;
       let precoSugerido = Number(custoCompra / divisor) * 100;
       setPrecoSugerido(Number(precoSugerido.toFixed(2)));
     }
-    if(Number(percVenda)>0 && percMargemLucro>0){
-      divisor = 100 - percVenda - percMargemLucro;
+    if(Number(percCustoVenda)>0 && (percMargemLucro===0 || !percMargemLucro)){
+      divisor = 100 - percCustoVenda;
       let precoSugerido = Number(custoCompra / divisor) * 100;
       setPrecoSugerido(Number(precoSugerido.toFixed(2)));
     }
-    /*
-    if(Number.isNaN(percVenda) === false && precoCompra > 0 ||
-    percMargemLucro > 0 && precoCompra>0){
+    if(Number(percCustoVenda)>0 && percMargemLucro>0){
+      divisor = 100 - percCustoVenda - percMargemLucro;
       let precoSugerido = Number(custoCompra / divisor) * 100;
       setPrecoSugerido(Number(precoSugerido.toFixed(2)));
     }
-*/
-/*
-    if(Number.isNaN(percVenda) && percMargemLucro===0 && precoCompra>0){
-      setPrecoSugerido(precoCompra);
-    } else if (
-      (Number.isNaN(percVenda) === false ||
-      percMargemLucro > 0 )
-    ) {
-      let precoSugerido = Number(custoCompra / divisor) * 100;
-      setPrecoSugerido(Number(precoSugerido.toFixed(2)));
-    } else {
-      setPrecoSugerido(custoCompra);
-    }*/
   }, [
     percMargemLucro,
     simplesNacValue,
@@ -225,7 +241,9 @@ function App() {
     ufIcmsVenda,
     regimeTrib,
     precoCompra,
-    custoCompra
+    custoCompra,
+    percCustoVenda,
+    percCustoFixoMensal
   ]);
 
   useEffect(() => {
@@ -238,6 +256,9 @@ function App() {
   }, [valorFrete, precoCompra]);
 
 
+  const handleSave = () => {
+    localStorage.setItem('fatMensal', JSON.stringify(fatMensalValue))
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -307,7 +328,7 @@ function App() {
             </>
           </VarAreaCalc>
           <ButtonArea>
-            <Button title="Salvar" success />
+            <Button title="Salvar" success onClick={handleSave}/>
             <Button
               title="Limpar"
               onClick={() => {

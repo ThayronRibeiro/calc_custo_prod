@@ -14,8 +14,8 @@ export const Variable = ({title, value, onChange}:VariableProps) => {
         
         <VarInputArea>
         <p>{title}</p>   
-        
-        <input value={value} onChange={onChange} /> 
+        {/* <IMaskInput value={value} onChange={onChange} mask="999.99" placeholder="0.00"></IMaskInput> */}
+        <input value={value} onChange={onChange} type="number"/>
         </VarInputArea>
         
         </>   
