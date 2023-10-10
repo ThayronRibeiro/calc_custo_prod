@@ -45,7 +45,7 @@ export const Body = styled.div`
 
   @media screen and (${device.laptopL}) {
     flex-direction: column;
-    width: 100%;
+    width: 100vw;
     height: auto;
   }
 `;
@@ -63,42 +63,47 @@ export const Calc = styled.div`
   box-shadow: 7px 9px 30px -8px rgba(59, 59, 59, 1);
 
   &:nth-child(2) {
-    height: 45vh;
+    height: auto;
   }
 
-  @media screen and (${device.desktop}) {
+  /* @media screen and (${device.desktop}) {
     width: 45vw;
-    height: 70vh;
+    height: 72vh;
     margin: 2rem 15px;
 
     &:nth-child(2) {
       height: 45vh;
     }
-  }
+  } 
 
   @media screen and (${device.tablet}) {
     height: 90vh;
     width: 85vw;
-  }
-
-  @media screen and (${device.laptopL}) {
-    width: 45vw;
-    height: 100%;
-    margin: 2rem 15px;
 
     &:nth-child(2) {
-      height: 70vh;
+      height: auto;
     }
   }
+*/
+  @media screen and (${device.laptopL}) {
+    width: 80vw;
+    height: auto;
+    margin: 2rem 15px;
 
+
+  }
+/* 
   @media screen and (${device.laptop}) {
     width: 65vw;
     height: 100%;
   }
 
-  &:nth-child(2) {
-    height: 30vw;
-  }
+  @media screen and (${device.mobileL}) {
+    height: 100%;
+    width: 85vw;
+
+  } */
+
 
 `;
 
