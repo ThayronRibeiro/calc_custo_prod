@@ -140,10 +140,6 @@ export const VarAreaCalc = styled.div`
 
   @media screen and (${device.laptopL}) {
     grid-template-columns: 2fr 2fr 2fr;
-
-    &:nth-child(2){
-      grid-template-columns: auto auto auto;            
-    }
   }
 
   @media screen and (${device.laptop}) {
