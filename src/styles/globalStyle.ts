@@ -42,8 +42,12 @@ export const Body = styled.div`
   height: 100vh;
   align-items: center;
 
-
   @media screen and (${device.laptopL}) {
+    flex-direction: row;
+  }
+
+
+  @media screen and (${device.laptop}) {
     flex-direction: column;
     width: 100vw;
     height: auto;
@@ -66,31 +70,16 @@ export const Calc = styled.div`
     height: auto;
   }
 
-  /* @media screen and (${device.desktop}) {
-    width: 45vw;
-    height: 72vh;
-    margin: 2rem 15px;
-
-    &:nth-child(2) {
-      height: 45vh;
-    }
-  } 
-
-  @media screen and (${device.tablet}) {
-    height: 90vh;
-    width: 85vw;
-
-    &:nth-child(2) {
-      height: auto;
-    }
-  }
-*/
   @media screen and (${device.laptopL}) {
     width: 80vw;
     height: auto;
     margin: 2rem 15px;
+  }
 
-
+  @media screen and (${device.laptop}) {
+    width: 80vw;
+    height: auto;
+    margin: 2rem 15px;
   }
 /* 
   @media screen and (${device.laptop}) {
@@ -150,7 +139,11 @@ export const VarAreaCalc = styled.div`
   margin: 10px 15px;
 
   @media screen and (${device.laptopL}) {
-    grid-template-columns: 2fr 2fr;
+    grid-template-columns: 2fr 2fr 2fr;
+
+    &:nth-child(2){
+      grid-template-columns: auto auto auto;            
+    }
   }
 
   @media screen and (${device.laptop}) {
