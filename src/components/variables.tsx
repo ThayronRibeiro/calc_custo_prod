@@ -6,16 +6,17 @@ interface VariableProps {
     title?: string;
     value?: number;
     onChange?: any;
+    disabled?: boolean;
 }
 
-export const Variable = ({title, value, onChange}:VariableProps) => {
+export const Variable = ({title, value, onChange, disabled }:VariableProps) => {
     return (
         <>
         
         <VarInputArea>
         <p>{title}</p>   
         {/* <IMaskInput value={value} onChange={onChange} mask="999.99" placeholder="0.00"></IMaskInput> */}
-        <input value={value} onChange={onChange} type="number"/>
+        <input value={value} onChange={onChange} type="number" disabled={disabled} />
         </VarInputArea>
         
         </>   

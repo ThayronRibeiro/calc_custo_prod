@@ -86,16 +86,18 @@
         value: percIcmsCompra,
         setValue: setPercIcmsCompra,
       },
+      { title: "MVA (%)", value: percMVASub, setValue: setPercMVASub },
+      { title: "Frete (R$)", value: valorFrete, setValue: setValorFrete },
+      { title: "Perc Frete (%)", value: percFrete, setValue: setPercFrete },
       {
         title: "Valor ICMS Subst (R$)",
         value: valorIcmsSubst,
         setValue: setValorIcmsSubst,
+        disabled: true
       },
-      { title: "Frete (R$)", value: valorFrete, setValue: setValorFrete },
-      { title: "Perc Frete (%)", value: percFrete, setValue: setPercFrete },
-      { title: "MVA (%)", value: percMVASub, setValue: setPercMVASub },
     ];
 
+    //LISTAGEM DAS UFS E SEUS VALORES DE ICMS
     const UFS = [
       { label: "AC", value: 19 },
       { label: "AL", value: 19 },
@@ -125,31 +127,38 @@
       { label: "TO", value: 20 },
     ];
 
-    /*
-    useEffect(()=>{
-      let percCustoFixoMensal = (custoFixoValue / fatMensalValue) * 100;
-
-      setPercCustoVenda(
-        percCustoFixoMensal +
-        Number(simplesNacValue) +
-        Number(comissaoValue) +
-        Number(pisValue) +
-        Number(cofinsValue) +
-        Number(irValue) +
-        Number(csllValue) +
-        Number(outrosValue));
-    },[simplesNacValue,comissaoValue,pisValue,cofinsValue,irValue,csllValue,outrosValue,custoFixoValue,fatMensalValue])
-  */
-
     function numberFloat (number: any)  {
       let stringNumber = JSON.stringify(number);
       let comVirgula = parseFloat(stringNumber.replace(',','.'));
       return comVirgula
     }
 
+    //USE EFFECT PARA ALTERAR O PERCENTUAL DE CUSTO FIXO MENSAL SEMPRE QUE ATUALIZAR O CUSTO FIXO E O FATURAMENTO MENSAL
     useEffect(()=> {
       setPercCustoFixoMensal((custoFixoValue / fatMensalValue) * 100);
     },[custoFixoValue,fatMensalValue]);
+
+
+    //USE EFFECT PARA CALCULAR VALOR DE SUBSTITUIÇÃO A PARTIR DO MVA
+    useEffect(()=>{
+
+      let valorIpi = Number((precoCompra * percIpiCompra) / 100);
+      let percMultiplicador = percIcmsCompra/100;
+      let valorIcms = (Number(precoCompra)+Number(valorFrete))*percMultiplicador;
+    
+      if(percMVASub>0){
+        let multiplicadorST = Number(1)+(percMVASub/100);
+        let baseCalcST = (Number(precoCompra) + Number(valorFrete) + valorIpi)*multiplicadorST;
+        /*(Number(percMVASub)/100*Number(precoCompra));*/
+        let valorICMSInterno = (Number(ufIcmsVenda)/100)*baseCalcST;
+
+        let valorIcmsSubst = Number(valorICMSInterno.toFixed(2)) - valorIcms;
+        setValorIcmsSubst(Number(valorIcmsSubst.toFixed(2)));
+      }
+      else{
+        setValorIcmsSubst(0);
+      }
+    },[percMVASub, valorIcmsSubst,precoCompra,ufIcmsVenda,percIcmsCompra,percIpiCompra,valorFrete])
 
 
     useEffect(() => {
@@ -165,6 +174,7 @@
 
       let custoCompraValor: number = 0;
 
+      //REGIME SIMPLES NACIONAL
       if (regimeTrib === "simplesNacional") {
         /*setPisValue(0);
         setCofinsValue(0);*/
@@ -178,6 +188,7 @@
           setCustoCompra(precoCompra);
         }
         else {
+          //PRODUTO SUBSTITUIÇÃO TRIBUTÁRIA
           if (valorIcmsSubst>0){
           let custoCompra =
             Number(precoCompra) +
@@ -185,7 +196,9 @@
             (Number(valorFrete) + Number(valorIcmsSubst));
   
           setCustoCompra(Number(custoCompra.toFixed(2)));
-          }else {
+          }
+          //PRODUTO TRIBUTADO
+          else {
             custoCompraValor =
               Number(precoCompra) +
               Number((precoCompra * percIpiCompra) / 100) +
@@ -374,6 +387,7 @@
                             onChange={(e: any) => {
                               prodValues.setValue(e.target.value);
                             }}
+                            disabled={prodValues.disabled}
                           />
                         </>
                       );

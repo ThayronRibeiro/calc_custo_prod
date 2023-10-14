@@ -59,7 +59,7 @@ export const Calc = styled.div`
   flex-direction: column;
   background-color: ${(props) => props.theme.color.ligth};
   width: 42vw;
-  height: 80vh;
+  height: auto;
   margin: 0px 45px;
   border-radius: 15px;
   -webkit-box-shadow: 7px 9px 30px -8px rgba(59, 59, 59, 1);
@@ -146,6 +146,10 @@ export const VarAreaCalc = styled.div`
     grid-template-columns: 2fr;
   }
 `;
+
+interface VarInputAreaProps {
+  disabled?: boolean;
+}
 
 export const VarInputArea = styled.div`
   display: flex;
