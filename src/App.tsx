@@ -88,7 +88,7 @@
       },
       { title: "MVA (%)", value: percMVASub, setValue: setPercMVASub },
       { title: "Frete (R$)", value: valorFrete, setValue: setValorFrete },
-      { title: "Perc Frete (%)", value: percFrete, setValue: setPercFrete },
+      { title: "Perc Frete (%)", value: percFrete, setValue: setPercFrete, disabled: true },
       {
         title: "Valor ICMS Subst (R$)",
         value: valorIcmsSubst,
@@ -161,6 +161,7 @@
     },[percMVASub, valorIcmsSubst,precoCompra,ufIcmsVenda,percIcmsCompra,percIpiCompra,valorFrete])
 
 
+    //CÁLCULOS DIFERENTES EM CADA REGIME TRIBUTÁRIO
     useEffect(() => {
       setPercCustoVenda(
         percCustoFixoMensal +
@@ -199,7 +200,7 @@
           }
           //PRODUTO TRIBUTADO
           else {
-            custoCompraValor =
+              custoCompraValor =
               Number(precoCompra) +
               Number((precoCompra * percIpiCompra) / 100) +
               Number(valorFrete);
@@ -268,7 +269,8 @@
       precoCompra,
       custoCompra,
       percCustoVenda,
-      percCustoFixoMensal
+      percCustoFixoMensal,
+      percMVASub
     ]);
 
     useEffect(() => {
