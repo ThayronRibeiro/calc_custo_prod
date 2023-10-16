@@ -354,6 +354,7 @@
                 )}
               </>
             </VarAreaCalc>
+            {/*
             <ButtonArea>
               <Button title="Salvar" success onClick={handleSave}/>
               <Button
@@ -371,6 +372,7 @@
                 }}
               />
             </ButtonArea>
+              */}
           </Calc>
           <Calc>
             <HeaderCalc>
